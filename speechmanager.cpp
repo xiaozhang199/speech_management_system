@@ -1,7 +1,7 @@
 #include"speechManager.h"
 
 SpeechManager::SpeechManager() {
-
+	this->initSpeech();
 }
 
 void SpeechManager::showMenu() {
@@ -19,6 +19,17 @@ void SpeechManager::exitSystem() {
 	cout << "欢迎下次使用" << endl;
 	system("pause");
 	exit(0);
+}
+
+void SpeechManager::initSpeech() {
+	//容器都置空
+	this->v1.clear();
+	this->v2.clear();
+	this->vVictory.clear();
+	this->m_Speaker.clear();
+
+	//初始化比赛轮数
+	this->m_Index = 1;
 }
 
 SpeechManager::~SpeechManager() {

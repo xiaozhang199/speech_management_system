@@ -1,6 +1,7 @@
 #pragma once
 #include<iostream>
 #include<vector>
+#include<map>
 using namespace std;
 
 class  SpeechManager
@@ -18,6 +19,9 @@ public:
 	//析构函数
 	~SpeechManager();
 
+	//初始化容器和属性
+	void initSpeech();
+
 	//成员属性
 	//保存第一轮比赛选手编号
 	vector<int>v1;
@@ -29,4 +33,8 @@ public:
 	vector<int>vVictory;
 
 	//存放编号以及对应具体选手容器
+	map<int, string>m_Speaker;
+
+	//存放比赛轮数
+	int m_Index;
 };
