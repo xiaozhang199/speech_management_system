@@ -1,8 +1,12 @@
 ﻿#include<iostream>
 #include"speechManager.h"
 using namespace std;
+#include<ctime>
 
 int main() {
+	//随机数种子
+	srand((unsigned int)time(NULL));
+
 	SpeechManager sm;
 
 	//测试
@@ -24,9 +28,10 @@ int main() {
 			sm.startSpeech();
 			break;
 		case 2://查看往届记录
-			
+			sm.showRecord();
 			break;
-		case 3:
+		case 3://清空比赛记录
+			sm.clearRecord();
 			break;
 		case 0:
 			sm.exitSystem();

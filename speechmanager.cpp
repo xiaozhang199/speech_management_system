@@ -31,6 +31,9 @@ void SpeechManager::initSpeech() {
 
 	//初始化比赛轮数
 	this->m_Index = 1;
+
+	//将记录的容器也清空
+	this->m_Record.clear();
 }
 
 void SpeechManager::createSpeaker() {
@@ -209,6 +212,13 @@ void SpeechManager::startSpeech() {
 	cout << "本届比赛完毕" << endl;
 	system("pause");
 	system("cls");
+
+	//重置比赛，获取记录
+	this->initSpeech();
+
+	this->createSpeaker();
+	
+	this->loadRecord();
 }
 
 void SpeechManager::saveRecord() {
@@ -222,6 +232,10 @@ void SpeechManager::saveRecord() {
 	ofs << endl;
 
 	ofs.close();
+	cout << "记录已被保存" << endl;
+
+	//更改文件状态
+	this->fileisEmpty = false;
 }
 
 void SpeechManager::loadRecord() {
@@ -229,7 +243,7 @@ void SpeechManager::loadRecord() {
 
 	if (!ifs.is_open()) {
 		this->fileisEmpty = true;
-		cout << "文件不存在！" << endl;
+	//	cout << "文件不存在！" << endl;
 		ifs.close();
 		return;
 	}
@@ -238,7 +252,7 @@ void SpeechManager::loadRecord() {
 	char ch;
 	ifs >> ch;
 	if (ifs.eof()) {
-		cout << "文件为空" << endl;
+	//	cout << "文件为空" << endl;
 		this->fileisEmpty = true;
 		ifs.close();
 		return;
@@ -250,12 +264,13 @@ void SpeechManager::loadRecord() {
 	ifs.putback(ch); // 将上面读取的字符，放回来
 
 	string data;
-	vector<string>v;
+	
 	int index = 0;
 	while (ifs >> data) {
 		int pos = -1;//查到逗号位置的变量
 		int start = 0;
-
+		
+		vector<string>v;
 		while (true) {
 			pos = data.find(",", start);
 			if (pos == -1) {
@@ -270,16 +285,58 @@ void SpeechManager::loadRecord() {
 		}
 		this->m_Record.insert(make_pair(index, v));
 		index++;
-
 	}
 	ifs.close();
 
-	for (map<int, vector<string>>::iterator it = m_Record.begin(); it != m_Record.end(); it++) {
-		cout << it->first << "冠军编号" << it->second[0]
-			<< "分数：" << it->second[1] << endl;
-	}
+	//for (map<int, vector<string>>::iterator it = m_Record.begin(); it != m_Record.end(); it++) {
+	//	cout << it->first << "冠军编号" << it->second[0]
+	//		<< "分数：" << it->second[1] << endl;
+	//}
 }
 
+void SpeechManager::showRecord() {
+	if (this->fileisEmpty) {
+		cout << "文件不存在或者记录为空！" << endl;
+	}
+	else {
+		for (map<int, vector<string>> ::iterator it = this->m_Record.begin(); it != this->m_Record.end();it++) {
+			cout << "第" << it->first + 1 << "届"
+				<< "冠军编号：" << it->second[0] << "得分：" << it->second[1] << " "
+				<< "亚军编号：" << it->second[2] << "得分：" << it->second[3] << " "
+				<< "季军编号：" << it->second[4] << "得分：" << it->second[5] << " "
+				<< endl;
+		}
+	}
+	
+}
+
+void SpeechManager::clearRecord() {
+	cout << "确认清空？" << endl;
+	cout << "1.确认" << endl;
+	cout << "2.返回" << endl;
+
+	int select = 0;
+	cin >> select;
+
+	if (select == 1) {
+		//确认清空
+		ofstream ofs("speech.csv", ios::trunc);
+		ofs.close();
+
+		this->initSpeech();
+
+		this->createSpeaker();
+
+		this->loadRecord();
+
+		cout << "清空成功！" << endl;
+	}
+	
+	system("pause");
+	system("cls");
+}
+
+//没有堆区数据，析构与否都可以
 SpeechManager::~SpeechManager() {
 
 }

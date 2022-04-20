@@ -71,4 +71,10 @@ public:
 
 	//存放往届记录的容器
 	map<int, vector<string>>m_Record;
+
+	//显示往届记录
+	void showRecord();
+
+	//清空比赛记录
+	void clearRecord();
 };
